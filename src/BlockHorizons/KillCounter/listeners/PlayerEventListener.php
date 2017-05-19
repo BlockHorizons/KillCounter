@@ -72,6 +72,9 @@ class PlayerEventListener extends BaseListener {
 	 */
 	public function onDeath(EntityDeathEvent $event) {
 		$entity = $event->getEntity();
+		if(!in_array($entity->getLevel()->getName(), $this->getLoader()->getConfig()->get("Disabled-Worlds", []))) {
+			return;
+		}
 		if(!$entity instanceof Player) {
 			$cause = $entity->getLastDamageCause();
 			if($cause instanceof EntityDamageByEntityEvent) {
@@ -87,6 +90,9 @@ class PlayerEventListener extends BaseListener {
 	public function onPlayerDeath(PlayerDeathEvent $event) {
 		$entity = $event->getPlayer();
 		$extraPoints = 0;
+		if(!in_array($entity->getLevel()->getName(), $this->getLoader()->getConfig()->get("Disabled-Worlds", []))) {
+			return;
+		}
 		if(($cause = $entity->getLastDamageCause())->getCause() !== EntityDamageEvent::CAUSE_ENTITY_ATTACK) {
 			$lastPlayerAttacker = $this->getLoader()->getServer()->getPlayer($this->getLastPlayerAttacker($entity));
 			if($lastPlayerAttacker !== null) {
@@ -94,7 +100,7 @@ class PlayerEventListener extends BaseListener {
 
 				if(!isset($this->kills[$lastPlayerAttacker->getName()])) {
 					$this->kills[$lastPlayerAttacker->getName()] = 0;
-				} else {
+				} elseif($this->kills[$lastPlayerAttacker->getName()] >= $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5)) {
 					$this->startKillingSpree($lastPlayerAttacker);
 				}
 				if(isset($this->killingSpree[$lastPlayerAttacker->getName()])) {
@@ -123,7 +129,7 @@ class PlayerEventListener extends BaseListener {
 
 				if(!isset($this->kills[$killer->getName()])) {
 					$this->kills[$killer->getName()] = 0;
-				} else {
+				} elseif($this->kills[$killer->getName()] >= $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5)) {
 					$this->startKillingSpree($killer);
 				}
 				if(isset($this->killingSpree[$killer->getName()])) {
@@ -163,9 +169,6 @@ class PlayerEventListener extends BaseListener {
 	 * @return bool
 	 */
 	public function startKillingSpree(Player $player): bool {
-		if($this->kills[$player->getName()] !== $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 4)) {
-			return false;
-		}
 		$this->killingSpree[$player->getName()] = new KillingSpree($this->getLoader(), $player);
 		return true;
 	}

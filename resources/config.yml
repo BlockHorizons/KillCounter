@@ -4,6 +4,11 @@
 # The provider to save the statistics of players in, like player kills.
 Provider: SQLite
 
+# Worlds the plugin should NOT work in.
+Disabled-Worlds:
+- MyWorld3
+- SpawnWorld98
+
 # The amount of points to award for killing a player.
 Points-Per-Player-Kill: 100
 
