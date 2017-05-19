@@ -1,0 +1,43 @@
+---
+# Configuration file for KillCounter plugin by BlockHorizons.
+
+# The provider to save the statistics of players in, like player kills.
+Provider: SQLite
+
+# The amount of points to award for killing a player.
+Points-Per-Player-Kill: 100
+
+# The amount of points to award for assisting in the killing of a player.
+Points-Per-Player-Assist: 30
+
+# The amount of points to award for killing an entity.
+Points-Per-Entity-Kill: 30
+
+# The amount of points to be subtracted from a player when it dies.
+Points-Lost-Per-Death: 50
+
+# The amount of points to add for every kill made during a killing spree.
+Points-Added-Per-Spree-Kill: 10
+
+# Amount of kills required for a killing spree to be declared.
+Kills-For-Killing-Spree: 5
+
+# Economy Support
+# The settings below are only used if economy is enabled.
+#
+# Support for economy is done using the Economizer library by @Chris-Prime (https://github.com/Chris-Prime/Economizer)
+# Installation of this library is required to have economy support enabled.
+Economy-Support: false
+
+# Subtracts an amount of money specified below from the player killed, and adds that to the killer.
+Enable-Money-Leeching: true
+
+# Amount of money earned when killing a player. (and subtracted when being killed with leech enabled)
+Money-Per-Player-Kill: 30
+
+# Amount of money earned when assisting in the killing of a player.
+Money-Per-Player-Assist: 15
+
+# Amount of money earned when killing an entity.
+Money-Per-Entity-Kill: 15
+...
