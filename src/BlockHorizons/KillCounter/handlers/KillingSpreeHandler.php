@@ -55,6 +55,13 @@ class KillingSpreeHandler extends BaseHandler {
 
 	/**
 	 * @param Player $player
+	 */
+	public function clearCurrentKills(Player $player) {
+		unset($this->currentKills[$player->getName()]);
+	}
+
+	/**
+	 * @param Player $player
 	 * @param int    $amount
 	 */
 	public function addKills(Player $player, int $amount = 1) {
@@ -101,7 +108,7 @@ class KillingSpreeHandler extends BaseHandler {
 	 *
 	 * @return KillingSpree
 	 */
-	public function &getKillingSpree(Player $player): KillingSpree {
+	public function getKillingSpree(Player $player): KillingSpree {
 		return $this->killingSpree[$player->getName()];
 	}
 
@@ -123,6 +130,7 @@ class KillingSpreeHandler extends BaseHandler {
 		if($this->hasKillingSpree($player)) {
 			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . "The killing spree of " . TF::RED . $player->getName() . TF::YELLOW . " has ended, with a total of " . TF::RED . $this->killingSpree[$player->getName()]->getKills() . " kills!");
 			unset($this->killingSpree[$player->getName()]);
+			$this->clearCurrentKills($player);
 			return true;
 		}
 		return false;

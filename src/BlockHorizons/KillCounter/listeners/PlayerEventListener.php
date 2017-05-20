@@ -139,6 +139,10 @@ class PlayerEventListener extends BaseListener {
 			}
 		}
 		$this->getProvider()->addDeaths($entity);
+		unset($this->damagedBy[$entity->getName()]);
+		unset($this->lastPlayerDamageCause[$entity->getName()]);
+
+		$this->getKillingSpreeHandler()->clearCurrentKills($entity);
 		$this->getKillingSpreeHandler()->endKillingSpree($entity);
 	}
 
