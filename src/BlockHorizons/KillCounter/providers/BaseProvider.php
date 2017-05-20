@@ -100,8 +100,8 @@ abstract class BaseProvider implements IProvider {
 	public function addPlayerKills($player, int $amount = 1, int $points = -1, int $money = -1): bool {
 		$extraMoney = 0;
 		$extraPoints = 0;
-		if($this->getLoader()->getEventListener()->isOnKillingSpree($player)) {
-			$killingSpree = $this->getLoader()->getEventListener()->getKillingSpree($player);
+		if($this->getLoader()->getKillingSpreeHandler()->hasKillingSpree($player)) {
+			$killingSpree = $this->getLoader()->getKillingSpreeHandler()->getKillingSpree($player);
 			$extraPoints = $killingSpree->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
 			$extraMoney = $killingSpree->getKills() * $this->getLoader()->getConfig()->get("Money-Added-Per-Spree-Kill");
 		}
