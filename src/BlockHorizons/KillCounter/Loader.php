@@ -4,6 +4,7 @@ namespace BlockHorizons\KillCounter;
 
 use BlockHorizons\KillCounter\commands\CommandOverloads;
 use BlockHorizons\KillCounter\commands\KillStatsCommand;
+use BlockHorizons\KillCounter\handlers\KillingSpreeHandler;
 use BlockHorizons\KillCounter\listeners\PlayerEventListener;
 use BlockHorizons\KillCounter\providers\BaseProvider;
 use BlockHorizons\KillCounter\providers\SQLiteProvider;
@@ -20,6 +21,7 @@ class Loader extends PluginBase {
 	private $economizer;
 	private $economyEnabled = false;
 	private $eventListener;
+	private $killingSpreeHandler;
 
 	public function onLoad() {
 		CommandOverloads::initialize();
@@ -35,10 +37,14 @@ class Loader extends PluginBase {
 
 		$this->saveDefaultConfig();
 		$this->registerCommands();
+
+		$this->killingSpreeHandler = new KillingSpreeHandler($this);
 	}
 
 	public function onDisable() {
 		$this->getProvider()->closeDatabase();
+
+		$this->getKillingSpreeHandler()->save();
 	}
 
 	/**
@@ -52,6 +58,13 @@ class Loader extends PluginBase {
 			$this->getServer()->getCommandMap()->register($command->getName(), $command);
 		}
 		return true;
+	}
+
+	/**
+	 * @return KillingSpreeHandler
+	 */
+	public function getKillingSpreeHandler(): KillingSpreeHandler {
+		return $this->killingSpreeHandler;
 	}
 
 	/**

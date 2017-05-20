@@ -3,17 +3,16 @@
 namespace BlockHorizons\KillCounter;
 
 use pocketmine\Player;
+use pocketmine\Server;
 use pocketmine\utils\TextFormat as TF;
 
 class KillingSpree {
 
-	private $loader;
 	private $player;
 	private $kills;
 
-	public function __construct(Loader $loader, Player $player, int $kills = 0) {
-		$this->loader = $loader;
-		$this->player = $player;
+	public function __construct(Player $player, int $kills = 0) {
+		$this->player = $player->getName();
 		$this->kills = $kills;
 	}
 
@@ -21,14 +20,18 @@ class KillingSpree {
 	 * @return Loader
 	 */
 	public function getLoader(): Loader {
-		return $this->loader;
+		$loader = Server::getInstance()->getPluginManager()->getPlugin("KillCounter");
+		if($loader instanceof Loader) {
+			return $loader;
+		}
+		return null;
 	}
 
 	/**
 	 * @return Player
 	 */
 	public function getPlayer(): Player {
-		return $this->player;
+		return Server::getInstance()->getPlayer($this->player);
 	}
 
 	/**
@@ -52,6 +55,6 @@ class KillingSpree {
 		$this->kills += $amount;
 
 		$totalKills = $this->kills + $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5);
-		$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . $this->getPlayer()->getName() . " is on a killing spree of " . TF::RED . TF::BOLD . $totalKills . TF::RESET . TF::YELLOW . " kills!");
+		Server::getInstance()->broadcastMessage(TF::YELLOW . $this->getPlayer()->getName() . " is on a killing spree of " . TF::RED . TF::BOLD . $totalKills . TF::RESET . TF::YELLOW . " kills!");
 	}
 }

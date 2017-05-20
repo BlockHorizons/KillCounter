@@ -2,6 +2,7 @@
 
 namespace BlockHorizons\KillCounter\listeners;
 
+use BlockHorizons\KillCounter\handlers\KillingSpreeHandler;
 use BlockHorizons\KillCounter\KillingSpree;
 use BlockHorizons\KillCounter\Loader;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -17,10 +18,6 @@ class PlayerEventListener extends BaseListener {
 
 	private $damagedBy = [];
 	private $lastPlayerDamageCause = [];
-
-	private $kills = [];
-	/** @var KillingSpree[] */
-	private $killingSpree = [];
 
 	public function __construct(Loader $loader) {
 		parent::__construct($loader);
@@ -98,16 +95,12 @@ class PlayerEventListener extends BaseListener {
 			if($lastPlayerAttacker !== null) {
 				$this->getProvider()->addPlayerKills($lastPlayerAttacker);
 
-				if(!isset($this->kills[$lastPlayerAttacker->getName()])) {
-					$this->kills[$lastPlayerAttacker->getName()] = 0;
-				} elseif($this->kills[$lastPlayerAttacker->getName()] >= $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5)) {
-					$this->startKillingSpree($lastPlayerAttacker);
+				$this->getKillingSpreeHandler()->addKills($lastPlayerAttacker);
+
+				if($this->getKillingSpreeHandler()->hasKillingSpree($lastPlayerAttacker)) {
+					$this->getKillingSpreeHandler()->getKillingSpree($lastPlayerAttacker)->addKills();
+					$extraPoints = $this->getKillingSpreeHandler()->getKillingSpree($lastPlayerAttacker)->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
 				}
-				if(isset($this->killingSpree[$lastPlayerAttacker->getName()])) {
-					$this->killingSpree[$lastPlayerAttacker->getName()]->addKills();
-					$extraPoints = $this->killingSpree[$lastPlayerAttacker->getName()]->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
-				}
-				$this->kills[$lastPlayerAttacker->getName()] += 1;
 
 				$lastPlayerAttacker->sendMessage(TF::AQUA . "+" . (string) ($this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getName() . "!");
 				foreach($this->damagedBy[$entity->getName()] as $playerName) {
@@ -127,16 +120,11 @@ class PlayerEventListener extends BaseListener {
 			if($killer instanceof Player) {
 				$this->getProvider()->addPlayerKills($killer);
 
-				if(!isset($this->kills[$killer->getName()])) {
-					$this->kills[$killer->getName()] = 0;
-				} elseif($this->kills[$killer->getName()] >= $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5)) {
-					$this->startKillingSpree($killer);
+				$this->getKillingSpreeHandler()->addKills($killer);
+				if($this->getKillingSpreeHandler()->hasKillingSpree($killer)) {
+					$this->getKillingSpreeHandler()->getKillingSpree($killer)->addKills();
+					$extraPoints = $this->getKillingSpreeHandler()->getKillingSpree($killer)->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
 				}
-				if(isset($this->killingSpree[$killer->getName()])) {
-					$this->killingSpree[$killer->getName()]->addKills();
-					$extraPoints = $this->killingSpree[$killer->getName()]->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
-				}
-				$this->kills[$killer->getName()] += 1;
 
 				$killer->sendMessage(TF::AQUA . "+" . (string) ($this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getName() . "!");
 				foreach($this->damagedBy[$entity->getName()] as $playerName) {
@@ -151,7 +139,7 @@ class PlayerEventListener extends BaseListener {
 			}
 		}
 		$this->getProvider()->addDeaths($entity);
-		$this->endKillingSpree($entity);
+		$this->getKillingSpreeHandler()->endKillingSpree($entity);
 	}
 
 	/**
@@ -164,44 +152,9 @@ class PlayerEventListener extends BaseListener {
 	}
 
 	/**
-	 * @param Player $player
-	 *
-	 * @return bool
+	 * @return KillingSpreeHandler
 	 */
-	public function startKillingSpree(Player $player): bool {
-		$this->killingSpree[$player->getName()] = new KillingSpree($this->getLoader(), $player);
-		return true;
-	}
-
-	/**
-	 * @param Player $player
-	 *
-	 * @return KillingSpree|null
-	 */
-	public function getKillingSpree(Player $player) {
-		return $this->killingSpree[$player->getName()];
-	}
-
-	/**
-	 * @param Player $player
-	 *
-	 * @return bool
-	 */
-	public function endKillingSpree(Player $player): bool {
-		if($this->isOnKillingSpree($player)) {
-			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . "The killing spree of " . TF::RED . $player->getName() . TF::YELLOW . " has ended, with a total of " . TF::RED . $this->killingSpree[$player->getName()]->getKills() . " kills!");
-			unset($this->killingSpree[$player->getName()]);
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @param Player $player
-	 *
-	 * @return bool
-	 */
-	public function isOnKillingSpree(Player $player) {
-		return isset($this->killingSpree[$player->getName()]);
+	public function getKillingSpreeHandler(): KillingSpreeHandler {
+		return $this->getLoader()->getKillingSpreeHandler();
 	}
 }
