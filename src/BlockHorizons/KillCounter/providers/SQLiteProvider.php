@@ -140,6 +140,16 @@ class SQLiteProvider extends BaseProvider {
 	}
 
 	/**
+	 * @param int $limit
+	 *
+	 * @return array
+	 */
+	public function getPointsTop(int $limit = 10): array {
+		$query = "SELECT * FROM KillCounter ORDER BY Points DESC LIMIT $limit";
+		return $this->database->query($query)->fetchArray(SQLITE3_ASSOC);
+	}
+
+	/**
 	 * @param string $string
 	 *
 	 * @return string

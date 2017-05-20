@@ -23,6 +23,13 @@ class CommandOverloads {
 					"name" => "player",
 					"optional" => true
 				]
+			],
+			"killstop" => [
+				0 => [
+					"type" => "int",
+					"name" => "limit",
+					"optional" => true
+				]
 			]
 		];
 	}

@@ -4,6 +4,7 @@ namespace BlockHorizons\KillCounter;
 
 use BlockHorizons\KillCounter\commands\CommandOverloads;
 use BlockHorizons\KillCounter\commands\KillStatsCommand;
+use BlockHorizons\KillCounter\commands\KillsTopCommand;
 use BlockHorizons\KillCounter\handlers\KillingSpreeHandler;
 use BlockHorizons\KillCounter\listeners\PlayerEventListener;
 use BlockHorizons\KillCounter\providers\BaseProvider;
@@ -52,7 +53,8 @@ class Loader extends PluginBase {
 	 */
 	public function registerCommands(): bool {
 		$commands = [
-			new KillStatsCommand($this)
+			new KillStatsCommand($this),
+			new KillsTopCommand($this)
 		];
 		foreach($commands as $command) {
 			$this->getServer()->getCommandMap()->register($command->getName(), $command);

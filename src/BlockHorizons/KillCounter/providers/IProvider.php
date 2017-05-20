@@ -155,4 +155,11 @@ interface IProvider {
 	 * @return bool
 	 */
 	public function addDeaths($player, int $amount = 1, int $subtractPoints = -1): bool;
+
+	/**
+	 * @param int $limit
+	 *
+	 * @return array
+	 */
+	public function getPointsTop(int $limit = 10): array;
 }
