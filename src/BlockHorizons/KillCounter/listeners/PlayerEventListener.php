@@ -69,7 +69,7 @@ class PlayerEventListener extends BaseListener {
 	 */
 	public function onDeath(EntityDeathEvent $event) {
 		$entity = $event->getEntity();
-		if(!in_array($entity->getLevel()->getName(), $this->getLoader()->getConfig()->get("Disabled-Worlds", []))) {
+		if(in_array($entity->getLevel()->getName(), $this->getLoader()->getConfig()->get("Disabled-Worlds", []))) {
 			return;
 		}
 		if(!$entity instanceof Player) {
@@ -87,7 +87,7 @@ class PlayerEventListener extends BaseListener {
 	public function onPlayerDeath(PlayerDeathEvent $event) {
 		$entity = $event->getPlayer();
 		$extraPoints = 0;
-		if(!in_array($entity->getLevel()->getName(), $this->getLoader()->getConfig()->get("Disabled-Worlds", []))) {
+		if(in_array($entity->getLevel()->getName(), $this->getLoader()->getConfig()->get("Disabled-Worlds", []))) {
 			return;
 		}
 		if(($cause = $entity->getLastDamageCause())->getCause() !== EntityDamageEvent::CAUSE_ENTITY_ATTACK) {
