@@ -36,7 +36,7 @@ class Loader extends PluginBase {
 		$this->selectProvider();
 		$this->getServer()->getPluginManager()->registerEvents($this->eventListener = new PlayerEventListener($this), $this);
 
-		$this->saveDefaultConfig();
+		$this->saveResource("config.yml");
 		$this->registerCommands();
 
 		$this->killingSpreeHandler = new KillingSpreeHandler($this);

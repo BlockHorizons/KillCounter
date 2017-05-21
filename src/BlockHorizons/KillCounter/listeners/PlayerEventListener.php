@@ -66,6 +66,8 @@ class PlayerEventListener extends BaseListener {
 
 	/**
 	 * @param EntityDeathEvent $event
+	 *
+	 * @priority MONITOR
 	 */
 	public function onDeath(EntityDeathEvent $event) {
 		$entity = $event->getEntity();
@@ -84,16 +86,25 @@ class PlayerEventListener extends BaseListener {
 			return;
 		}
 	}
+
+	/**
+	 * @param PlayerDeathEvent $event
+	 *
+	 * @priority MONITOR
+	 */
 	public function onPlayerDeath(PlayerDeathEvent $event) {
 		$entity = $event->getPlayer();
 		$extraPoints = 0;
+		$spreeKills = $this->getLoader()->getConfig()->get("Points-Per-Spree-Killing");
+		$lastPlayerAttacker = null;
+		$killer = null;
 		if(in_array($entity->getLevel()->getName(), $this->getLoader()->getConfig()->get("Disabled-Worlds", []))) {
 			return;
 		}
 		if(($cause = $entity->getLastDamageCause())->getCause() !== EntityDamageEvent::CAUSE_ENTITY_ATTACK) {
 			$lastPlayerAttacker = $this->getLoader()->getServer()->getPlayer($this->getLastPlayerAttacker($entity));
 			if($lastPlayerAttacker !== null) {
-				$this->getProvider()->addPlayerKills($lastPlayerAttacker);
+				$this->getProvider()->addPlayerKills($lastPlayerAttacker, 1, $this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills : -1);
 
 				$this->getKillingSpreeHandler()->addKills($lastPlayerAttacker);
 
@@ -102,7 +113,7 @@ class PlayerEventListener extends BaseListener {
 					$extraPoints = $this->getKillingSpreeHandler()->getKillingSpree($lastPlayerAttacker)->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
 				}
 
-				$lastPlayerAttacker->sendMessage(TF::AQUA . "+" . (string) ($this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getName() . "!");
+				$lastPlayerAttacker->sendMessage(TF::AQUA . "+" . (string) ($this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills : $this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getName() . "!");
 				foreach($this->damagedBy[$entity->getName()] as $playerName) {
 					if($playerName === $lastPlayerAttacker->getName()) {
 						continue;
@@ -118,7 +129,7 @@ class PlayerEventListener extends BaseListener {
 		elseif($cause instanceof EntityDamageByEntityEvent) {
 			$killer = $cause->getDamager();
 			if($killer instanceof Player) {
-				$this->getProvider()->addPlayerKills($killer);
+				$this->getProvider()->addPlayerKills($killer, 1, $this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills : -1);
 
 				$this->getKillingSpreeHandler()->addKills($killer);
 				if($this->getKillingSpreeHandler()->hasKillingSpree($killer)) {
@@ -126,7 +137,7 @@ class PlayerEventListener extends BaseListener {
 					$extraPoints = $this->getKillingSpreeHandler()->getKillingSpree($killer)->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
 				}
 
-				$killer->sendMessage(TF::AQUA . "+" . (string) ($this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getName() . "!");
+				$killer->sendMessage(TF::AQUA . "+" . (string) ($this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills : $this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getName() . "!");
 				foreach($this->damagedBy[$entity->getName()] as $playerName) {
 					if($playerName === $killer->getName()) {
 						continue;
@@ -142,8 +153,10 @@ class PlayerEventListener extends BaseListener {
 		unset($this->damagedBy[$entity->getName()]);
 		unset($this->lastPlayerDamageCause[$entity->getName()]);
 
-		$this->getKillingSpreeHandler()->clearCurrentKills($entity);
-		$this->getKillingSpreeHandler()->endKillingSpree($entity);
+		if(isset($killer) || isset($lastPlayerAttacker)) {
+			$this->getKillingSpreeHandler()->clearCurrentKills($entity);
+			$this->getKillingSpreeHandler()->endKillingSpree($entity, $killer ?? $lastPlayerAttacker);
+		}
 	}
 
 	/**

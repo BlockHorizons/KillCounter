@@ -15,6 +15,9 @@ class KillingSpreeHandler extends BaseHandler {
 	public function __construct(Loader $loader) {
 		parent::__construct($loader);
 
+		if(!file_exists($loader->getDataFolder() . "killingsprees.yml")) {
+			return;
+		}
 		$killingSprees = yaml_parse_file($loader->getDataFolder() . "killingsprees.yml");
 		foreach($killingSprees as $name => $killingSpree) {
 			$killingSpree = unserialize($killingSpree);
@@ -126,8 +129,9 @@ class KillingSpreeHandler extends BaseHandler {
 	 *
 	 * @return bool
 	 */
-	public function endKillingSpree(Player $player): bool {
+	public function endKillingSpree(Player $player, Player $killer): bool {
 		if($this->hasKillingSpree($player)) {
+			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . TF::BOLD . "Shut down! " . TF::RESET . TF::AQUA . $player->getName() . " was killed by " . $killer->getName());
 			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . "The killing spree of " . TF::RED . $player->getName() . TF::YELLOW . " has ended, with a total of " . TF::RED . $this->killingSpree[$player->getName()]->getKills() . " kills!");
 			unset($this->killingSpree[$player->getName()]);
 			$this->clearCurrentKills($player);

@@ -54,7 +54,7 @@ class KillingSpree {
 	public function addKills(int $amount = 1) {
 		$this->kills += $amount;
 
-		$totalKills = $this->kills + $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5);
+		$totalKills = $this->kills + $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5) - 1;
 		Server::getInstance()->broadcastMessage(TF::YELLOW . $this->getPlayer()->getName() . " is on a killing spree of " . TF::RED . TF::BOLD . $totalKills . TF::RESET . TF::YELLOW . " kills!");
 	}
 }

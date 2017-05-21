@@ -27,6 +27,9 @@ Points-Added-Per-Spree-Kill: 10
 # Amount of kills required for a killing spree to be declared.
 Kills-For-Killing-Spree: 5
 
+# The amount of points obtained when killing a player that has a killing spree active.
+Points-For-Spree-Killing: 200
+
 # Economy Support
 # The settings below are only used if economy is enabled.
 #
