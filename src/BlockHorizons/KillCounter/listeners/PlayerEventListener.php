@@ -103,6 +103,9 @@ class PlayerEventListener extends BaseListener {
 			return;
 		}
 		if(($cause = $entity->getLastDamageCause())->getCause() !== EntityDamageEvent::CAUSE_ENTITY_ATTACK) {
+			if(!$this->getLoader()->getConfig()->get("Track-Non-Player-Damage-Deaths") === true) {
+				return;
+			}
 			$lastPlayerAttacker = $this->getLoader()->getServer()->getPlayer($this->getLastPlayerAttacker($entity));
 			if($lastPlayerAttacker !== null) {
 				$this->getProvider()->addPlayerKills($lastPlayerAttacker, 1, $this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills - 10 : -1);

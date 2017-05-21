@@ -9,6 +9,9 @@ Disabled-Worlds:
 - MyWorld3
 - SpawnWorld98
 
+# Whether to check if there was a last player who damaged the dead one, and reward that player with points, even though the actual cause was not the last player that damaged it.
+Track-Non-Player-Damage-Deaths: true
+
 # The amount of points to award for killing a player.
 Points-Per-Player-Kill: 100
 
@@ -60,7 +63,7 @@ Enable-Achievements: true
 # Player-Assists: The required amount of assists on players.
 # Entity-Kills: The required amount of entity kills.
 # Deaths: The required amount of deaths.
-# Points-Reward: The amount of points to reward when achieving the achievement.
+# Points-Reward: The amount of points to reward when achieving the achievement. A - can be added to subtract points.
 # Message: The message to send to the player when achieving the achievement. New lines can be made using '\n'.
 
 Achievements:
