@@ -49,12 +49,19 @@ class KillingSpree {
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getTotalKills(): int {
+		return $this->kills + $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5) - 1;
+	}
+
+	/**
 	 * @param int $amount
 	 */
 	public function addKills(int $amount = 1) {
 		$this->kills += $amount;
 
-		$totalKills = $this->kills + $this->getLoader()->getConfig()->get("Kills-For-Killing-Spree", 5) - 1;
+		$totalKills = $this->getTotalKills();
 		Server::getInstance()->broadcastMessage(TF::YELLOW . $this->getPlayer()->getName() . " is on a killing spree of " . TF::RED . TF::BOLD . $totalKills . TF::RESET . TF::YELLOW . " kills!");
 	}
 }

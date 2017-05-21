@@ -10,6 +10,7 @@ use pocketmine\utils\TextFormat as TF;
 class KillingSpreeHandler extends BaseHandler {
 
 	private $currentKills = [];
+	/** @var KillingSpree[] */
 	private $killingSpree = [];
 
 	public function __construct(Loader $loader) {
@@ -132,7 +133,7 @@ class KillingSpreeHandler extends BaseHandler {
 	public function endKillingSpree(Player $player, Player $killer): bool {
 		if($this->hasKillingSpree($player)) {
 			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . TF::BOLD . "Shut down! " . TF::RESET . TF::AQUA . $player->getName() . " was killed by " . $killer->getName());
-			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . "The killing spree of " . TF::RED . $player->getName() . TF::YELLOW . " has ended, with a total of " . TF::RED . $this->killingSpree[$player->getName()]->getKills() . " kills!");
+			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . "The killing spree of " . TF::RED . $player->getName() . TF::YELLOW . " has ended, with a total of " . TF::RED . $this->killingSpree[$player->getName()]->getTotalKills() . " kills!");
 			unset($this->killingSpree[$player->getName()]);
 			$this->clearCurrentKills($player);
 			return true;
