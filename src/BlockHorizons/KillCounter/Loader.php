@@ -2,6 +2,7 @@
 
 namespace BlockHorizons\KillCounter;
 
+use BlockHorizons\KillCounter\achievements\AchievementManager;
 use BlockHorizons\KillCounter\commands\CommandOverloads;
 use BlockHorizons\KillCounter\commands\KillStatsCommand;
 use BlockHorizons\KillCounter\commands\KillsTopCommand;
@@ -21,8 +22,9 @@ class Loader extends PluginBase {
 	private $provider;
 	private $economizer;
 	private $economyEnabled = false;
-	private $eventListener;
+
 	private $killingSpreeHandler;
+	private $achievementManager;
 
 	public function onLoad() {
 		CommandOverloads::initialize();
@@ -34,12 +36,13 @@ class Loader extends PluginBase {
 		}
 		$this->prepareEconomy();
 		$this->selectProvider();
-		$this->getServer()->getPluginManager()->registerEvents($this->eventListener = new PlayerEventListener($this), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new PlayerEventListener($this), $this);
 
 		$this->saveResource("config.yml");
 		$this->registerCommands();
 
 		$this->killingSpreeHandler = new KillingSpreeHandler($this);
+		$this->achievementManager = new AchievementManager($this);
 	}
 
 	public function onDisable() {
@@ -67,6 +70,13 @@ class Loader extends PluginBase {
 	 */
 	public function getKillingSpreeHandler(): KillingSpreeHandler {
 		return $this->killingSpreeHandler;
+	}
+
+	/**
+	 * @return AchievementManager
+	 */
+	public function getAchievementManager(): AchievementManager {
+		return $this->achievementManager;
 	}
 
 	/**
@@ -138,12 +148,5 @@ class Loader extends PluginBase {
 	 */
 	public function getEconomy(): Transistor {
 		return $this->economizer;
-	}
-
-	/**
-	 * @return PlayerEventListener
-	 */
-	public function getEventListener(): PlayerEventListener {
-		return $this->eventListener;
 	}
 }

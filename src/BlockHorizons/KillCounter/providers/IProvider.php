@@ -162,4 +162,20 @@ interface IProvider {
 	 * @return array
 	 */
 	public function getPointsTop(int $limit = 10): array;
+
+	/**
+	 * @param        $player
+	 * @param string $achievement
+	 *
+	 * @return bool
+	 */
+	public function achieveAchievement($player, string $achievement): bool;
+
+	/**
+	 * @param        $player
+	 * @param string $achievement
+	 *
+	 * @return bool
+	 */
+	public function hasAchievement($player, string $achievement): bool;
 }

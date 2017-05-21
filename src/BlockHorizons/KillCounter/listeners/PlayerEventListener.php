@@ -2,6 +2,7 @@
 
 namespace BlockHorizons\KillCounter\listeners;
 
+use BlockHorizons\KillCounter\events\player\PlayerPointsChangeEvent;
 use BlockHorizons\KillCounter\handlers\KillingSpreeHandler;
 use BlockHorizons\KillCounter\KillingSpree;
 use BlockHorizons\KillCounter\Loader;
@@ -156,6 +157,20 @@ class PlayerEventListener extends BaseListener {
 		if(isset($killer) || isset($lastPlayerAttacker)) {
 			$this->getKillingSpreeHandler()->clearCurrentKills($entity);
 			$this->getKillingSpreeHandler()->endKillingSpree($entity, $killer ?? $lastPlayerAttacker);
+		}
+	}
+
+	/**
+	 * @param PlayerPointsChangeEvent $event
+	 */
+	public function onPointsGain(PlayerPointsChangeEvent $event) {
+		foreach($this->getLoader()->getAchievementManager()->getAchievements() as $name => $achievement) {
+			if($achievement->meetsRequirements($event->getPlayer())) {
+				if($this->getLoader()->getProvider()->hasAchievement($event->getPlayer(), $name)) {
+					return;
+				}
+				$achievement->achieve($event->getPlayer());
+			}
 		}
 	}
 

@@ -48,4 +48,27 @@ Money-Per-Player-Assist: 15
 
 # Amount of money earned when killing an entity.
 Money-Per-Entity-Kill: 15
+
+# Achievements
+
+# Whether to enable or disable achievements.
+Enable-Achievements: true
+
+# Achievements can be created here. An example has been made.
+#
+# Player-Kills: The required amount of kills on players.
+# Player-Assists: The required amount of assists on players.
+# Entity-Kills: The required amount of entity kills.
+# Deaths: The required amount of deaths.
+# Points-Reward: The amount of points to reward when achieving the achievement.
+# Message: The message to send to the player when achieving the achievement. New lines can be made using '\n'.
+
+Achievements:
+  ExampleAchievement:
+    Player-Kills: 10
+    Player-Assists: 10
+    Entity-Kills: 10
+    Deaths: 100
+    Points-Reward: 1000
+    Message: §bYou have died! §lAgain! \n§r§aCongratulations on achieving this achievement, you have earned 1000 points!
 ...

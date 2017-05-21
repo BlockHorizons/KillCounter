@@ -2,6 +2,8 @@
 
 namespace BlockHorizons\KillCounter\handlers;
 
+use BlockHorizons\KillCounter\events\player\killingspree\PlayerKillingSpreeEndEvent;
+use BlockHorizons\KillCounter\events\player\killingspree\PlayerKillingSpreeStartEvent;
 use BlockHorizons\KillCounter\KillingSpree;
 use BlockHorizons\KillCounter\Loader;
 use pocketmine\Player;
@@ -103,7 +105,13 @@ class KillingSpreeHandler extends BaseHandler {
 		if(isset($this->killingSpree[$player->getName()])) {
 			return false;
 		}
-		$this->killingSpree[$player->getName()] = new KillingSpree($player, $kills);
+		$this->getLoader()->getServer()->getPluginManager()->callEvent($ev = new PlayerKillingSpreeStartEvent($this->getLoader(), $player, $kills + $this->getCurrentKills($player), $kills));
+		if($ev->isCancelled()) {
+			return false;
+		}
+
+		$this->currentKills = $ev->getTotalKills() - $ev->getStartingKills();
+		$this->killingSpree[$player->getName()] = new KillingSpree($player, $ev->getStartingKills());
 		return true;
 	}
 
@@ -132,6 +140,10 @@ class KillingSpreeHandler extends BaseHandler {
 	 */
 	public function endKillingSpree(Player $player, Player $killer): bool {
 		if($this->hasKillingSpree($player)) {
+			$this->getLoader()->getServer()->getPluginManager()->callEvent($ev = new PlayerKillingSpreeEndEvent($this->getLoader(), $player, $this->getKillingSpree($player)->getTotalKills(), $this->getKillingSpree($player)->getKills()));
+			if($ev->isCancelled()) {
+				return false;
+			}
 			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . TF::BOLD . "Shut down! " . TF::RESET . TF::AQUA . $player->getName() . " was killed by " . $killer->getName());
 			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . "The killing spree of " . TF::RED . $player->getName() . TF::YELLOW . " has ended, with a total of " . TF::RED . $this->killingSpree[$player->getName()]->getTotalKills() . " kills!");
 			unset($this->killingSpree[$player->getName()]);

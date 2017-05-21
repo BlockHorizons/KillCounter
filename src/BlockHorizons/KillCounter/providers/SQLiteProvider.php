@@ -2,6 +2,8 @@
 
 namespace BlockHorizons\KillCounter\providers;
 
+use BlockHorizons\KillCounter\events\player\PlayerPointsChangeEvent;
+use BlockHorizons\KillCounter\events\player\PointsChangeEvent;
 use pocketmine\Player;
 
 class SQLiteProvider extends BaseProvider {
@@ -24,7 +26,39 @@ class SQLiteProvider extends BaseProvider {
 					  EntityKills INT,
 					  Deaths INT,
 					  Points INT)";
+		$this->database->exec($query);
+
+		$query = "CREATE TABLE IF NOT EXISTS Achievements(
+					  Player VARCHAR(16),
+					  Achievement VARCHAR(128),
+					  PRIMARY KEY(Player, Achievement))";
 		return $this->database->exec($query);
+	}
+
+	/**
+	 * @param        $player
+	 * @param string $achievement
+	 *
+	 * @return bool
+	 */
+	public function achieveAchievement($player, string $achievement): bool {
+		$player = $this->turnToPlayerName($player);
+
+		$query = "INSERT INTO Achievements(Player, Achievement) VALUES ('" . $this->escape($player) . "', '" . $this->escape($achievement) . "')";
+		return $this->database->exec($query);
+	}
+
+	/**
+	 * @param        $player
+	 * @param string $achievement
+	 *
+	 * @return bool
+	 */
+	public function hasAchievement($player, string $achievement): bool {
+		$player = $this->turnToPlayerName($player);
+
+		$query = "SELECT * FROM Achievements WHERE Player = '" . $this->escape($player) . "' AND Achievement = '" . $this->escape($achievement) . "'";
+		return !empty($this->database->query($query)->fetchArray(SQLITE3_ASSOC));
 	}
 
 	/**
@@ -85,6 +119,14 @@ class SQLiteProvider extends BaseProvider {
 	 */
 	public function setPoints($player, int $amount): bool {
 		$player = $this->turnToPlayerName($player);
+
+		if(($foundPlayer = $this->getLoader()->getServer()->getPlayer($player)) !== null) {
+			$this->getLoader()->getServer()->getPluginManager()->callEvent($ev = new PlayerPointsChangeEvent($this->getLoader(), $foundPlayer, $this->getPoints($foundPlayer), $amount));
+			$amount = $ev->getNext();
+			if($ev->isCancelled()) {
+				return false;
+			}
+		}
 
 		$query = "UPDATE KillCounter SET Points = $amount WHERE Player = '" . $this->escape($player) . "'";
 		return $this->database->exec($query);
