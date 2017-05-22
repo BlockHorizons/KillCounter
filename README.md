@@ -18,7 +18,7 @@ KillCounter has a more advanced kill tracking system than other kill tracking pl
 It is mostly recommended to use released versions of the plugin, which can be found in the released version on Poggit. (once there is one)<br>
 If you do decide you want the latest version of the plugin, it is recommended you fetch a pre-compiled phar file from Poggit-CI, which can be found below.
 <br>
-[![Poggit-CI](https://poggit.pmmp.io/ci.shield/Sandertv/KillCounter/KillCounter)](https://poggit.pmmp.io/ci/Sandertv/KillCounter/KillCounter)
+[![Poggit-CI](https://poggit.pmmp.io/ci.shield/BlockHorizons/KillCounter/KillCounter)](https://poggit.pmmp.io/ci/BlockHorizons/KillCounter/KillCounter)
 
 ### Support
 I found an issue in the plugin which I would like to be fixed quickly! What do I do?<br>
