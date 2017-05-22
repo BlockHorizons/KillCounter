@@ -37,8 +37,8 @@ class KillStatsCommand extends BaseCommand {
 		}
 		$data = $this->getLoader()->getProvider()->getPlayerStats($player);
 
-		$player->sendMessage(TF::GREEN . "--- " . TF::YELLOW . "KillCounter" . TF::GREEN . " ---");
-		$player->sendMessage(
+		$sender->sendMessage(TF::GREEN . "--- " . TF::YELLOW . "KillCounter" . TF::GREEN . " ---");
+		$sender->sendMessage(
 			TF::GREEN . "Player Kills: " . TF::YELLOW . $data["PlayerKills"] . "\n" .
 			TF::GREEN . "Player Assists: " . TF::YELLOW . $data["PlayerAssists"] . "\n" .
 			TF::GREEN . "Entity Kills: " . TF::YELLOW . $data["EntityKills"] . "\n" .
