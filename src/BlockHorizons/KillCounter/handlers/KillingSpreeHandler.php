@@ -110,7 +110,7 @@ class KillingSpreeHandler extends BaseHandler {
 			return false;
 		}
 
-		$this->currentKills = $ev->getTotalKills() - $ev->getStartingKills();
+		$this->currentKills[$player->getName()] = $ev->getTotalKills() - $ev->getStartingKills();
 		$this->killingSpree[$player->getName()] = new KillingSpree($player, $ev->getStartingKills());
 		return true;
 	}
