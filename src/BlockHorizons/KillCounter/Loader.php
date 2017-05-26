@@ -34,11 +34,12 @@ class Loader extends PluginBase {
 		if(!is_dir($this->getDataFolder())) {
 			mkdir($this->getDataFolder());
 		}
+		$this->saveResource("config.yml");
+		
 		$this->prepareEconomy();
 		$this->selectProvider();
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerEventListener($this), $this);
 
-		$this->saveResource("config.yml");
 		$this->registerCommands();
 
 		$this->killingSpreeHandler = new KillingSpreeHandler($this);
