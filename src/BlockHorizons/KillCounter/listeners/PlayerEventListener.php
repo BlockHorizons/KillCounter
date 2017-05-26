@@ -96,7 +96,7 @@ class PlayerEventListener extends BaseListener {
 	public function onPlayerDeath(PlayerDeathEvent $event) {
 		$entity = $event->getPlayer();
 		$extraPoints = 0;
-		$spreeKills = $this->getLoader()->getConfig()->get("Points-Per-Spree-Killing");
+		$spreeKills = $this->getLoader()->getConfig()->get("Points-For-Spree-Killing");
 		$lastPlayerAttacker = null;
 		$killer = null;
 		if(in_array($entity->getLevel()->getName(), $this->getLoader()->getConfig()->get("Disabled-Worlds", []))) {
