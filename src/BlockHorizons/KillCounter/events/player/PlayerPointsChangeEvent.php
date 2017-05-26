@@ -10,6 +10,8 @@ use pocketmine\Player;
 
 class PlayerPointsChangeEvent extends PlayerEvent implements Cancellable {
 
+	public static $handlerList = null;
+
 	private $previousAmount;
 	private $nextAmount;
 

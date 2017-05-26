@@ -9,6 +9,8 @@ use pocketmine\Player;
 
 class PlayerKillingSpreeEndEvent extends PlayerEvent implements Cancellable {
 
+	public static $handlerList = null;
+
 	private $totalKills;
 	private $spreeKills;
 

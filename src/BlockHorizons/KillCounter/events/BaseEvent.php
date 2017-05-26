@@ -8,7 +8,6 @@ use pocketmine\plugin\Plugin;
 
 abstract class BaseEvent extends PluginEvent {
 
-	public static $handlerList = null;
 	private $loader;
 
 	public function __construct(Loader $loader) {

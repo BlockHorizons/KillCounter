@@ -9,6 +9,8 @@ use pocketmine\Player;
 
 class PlayerKillCounterAchievementGainEvent extends PlayerEvent implements Cancellable {
 
+	public static $handlerList = null;
+
 	private $achievement;
 
 	public function __construct(Loader $loader, Player $player, KillCounterAchievement $achievement) {
