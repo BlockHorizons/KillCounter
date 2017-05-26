@@ -192,7 +192,9 @@ class SQLiteProvider extends BaseProvider {
 		$return = $this->database->query($query);
 		for($i = 1; $i < $limit; $i++) {
 			$step = $return->fetchArray(SQLITE3_ASSOC);
-			$top[$step["Player"]] = $step["Points"];
+			if(!empty($step["Player"])){
+			       $top[$step["Player"]] = $step["Points"];
+			}
 		}
 		return $top;
 	}
