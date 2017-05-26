@@ -15,6 +15,8 @@ class KillingSpreeHandler extends BaseHandler {
 	/** @var KillingSpree[] */
 	private $killingSpree = [];
 
+	private $latestKill = [];
+
 	public function __construct(Loader $loader) {
 		parent::__construct($loader);
 
@@ -70,9 +72,38 @@ class KillingSpreeHandler extends BaseHandler {
 	 * @param Player $player
 	 * @param int    $amount
 	 */
-	public function addKills(Player $player, int $amount = 1) {
+	public function addKills(Player $player, Player $victim, int $amount = 1) {
 		$this->addPlayer($player);
 		$this->currentKills[$player->getName()] += $amount;
+
+		if(isset($this->latestKill[$player->getName()]) && $this->getLoader()->getConfig()->get("Enable-Multi-Kill")) {
+			if(time() - $this->getLatestKill($player)["time"] <= $this->getLoader()->getConfig()->get("Multi-Kill-Time")) {
+				switch($this->getLatestKill($player)["kills"]) {
+					default:
+					case 1:
+						$type = "Double Kill! ";
+						break;
+					case 2:
+						$type = "Triple Kill! ";
+						break;
+					case 3:
+						$type = "Quadra Kill! ";
+						break;
+					case 4:
+						$type = "Penta Kill! ";
+						break;
+					case 5:
+						$type = "Hexa Kill! ";
+						unset($this->latestKill[$player->getName()]);
+						break;
+				}
+				$message = TF::RED . TF::BOLD . $type . TF::RESET . TF::YELLOW . $player->getDisplayName() . " has slain " . TF::RED . $victim->getDisplayName() . TF::YELLOW . "!";
+				$this->getLoader()->getServer()->broadcastMessage($message);
+			} else {
+				unset($this->latestKill[$player->getName()]);
+			}
+		}
+		$this->setLatestKill($player);
 
 		if($this->getCurrentKills($player) >= $this->getRequiredKills()) {
 			$this->startKillingSpree($player);
@@ -135,6 +166,7 @@ class KillingSpreeHandler extends BaseHandler {
 
 	/**
 	 * @param Player $player
+	 * @param Player $killer
 	 *
 	 * @return bool
 	 */
@@ -144,12 +176,34 @@ class KillingSpreeHandler extends BaseHandler {
 			if($ev->isCancelled()) {
 				return false;
 			}
-			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . TF::BOLD . "Shut down! " . TF::RESET . TF::AQUA . $player->getName() . " was killed by " . $killer->getName());
-			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . "The killing spree of " . TF::RED . $player->getName() . TF::YELLOW . " has ended, with a total of " . TF::RED . $this->killingSpree[$player->getName()]->getTotalKills() . " kills!");
+			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . TF::BOLD . "Shut down! " . TF::RESET . TF::AQUA . $player->getDisplayName() . " was killed by " . $killer->getDisplayName());
+			$this->getLoader()->getServer()->broadcastMessage(TF::YELLOW . "The killing spree of " . TF::RED . $player->getDisplayName() . TF::YELLOW . " has ended, with a total of " . TF::RED . $this->killingSpree[$player->getName()]->getTotalKills() . " kills!");
 			unset($this->killingSpree[$player->getName()]);
 			$this->clearCurrentKills($player);
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * @param Player $player
+	 *
+	 * @return bool
+	 */
+	public function setLatestKill(Player $player): bool {
+		$this->latestKill[$player->getName()] = [
+			"time" => time(),
+			"kills" => (isset($this->latestKill[$player->getName()]) ? $this->latestKill[$player->getName()]["kills"] + 1 : 1)
+		];
+		return true;
+	}
+
+	/**
+	 * @param Player $player
+	 *
+	 * @return array
+	 */
+	public function getLatestKill(Player $player) {
+		return $this->latestKill[$player->getName()];
 	}
 }

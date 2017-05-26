@@ -33,6 +33,12 @@ Kills-For-Killing-Spree: 5
 # The amount of points obtained when killing a player that has a killing spree active.
 Points-For-Spree-Killing: 200
 
+# Whether to enable 'multi-kills' such as a double or a triple kill, or disable them.
+Enable-Multi-Kill: true
+
+# Maximum amount of time between to kills to be declared a 'multi-kill' in seconds.
+Multi-Kill-Time: 8
+
 # Economy Support
 # The settings below are only used if economy is enabled.
 #
