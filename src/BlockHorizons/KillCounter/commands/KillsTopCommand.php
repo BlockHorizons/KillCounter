@@ -34,8 +34,8 @@ class KillsTopCommand extends BaseCommand {
 		$sender->sendMessage(TF::GREEN . "--- " . TF::YELLOW . "Kill Points Top" . TF::GREEN . " ---");
 		$i = 1;
 		foreach($data as $player => $points) {
-			$i++;
 			$sender->sendMessage(TF::GREEN . "[" . $i . "] " . TF::YELLOW . ucfirst($player) . " : " . TF::RED . TF::BOLD . $points);
+			$i++;
 		}
 		return true;
 	}
