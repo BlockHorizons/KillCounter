@@ -190,7 +190,7 @@ class SQLiteProvider extends BaseProvider {
 		$query = "SELECT * FROM KillCounter ORDER BY Points DESC LIMIT $limit";
 		$top = [];
 		$return = $this->database->query($query);
-		for($i = 1; $i < $limit; $i++) {
+		for($i = 0; $i < $limit; $i++) {
 			$step = $return->fetchArray(SQLITE3_ASSOC);
 			if(!empty($step["Player"])){
 			       $top[$step["Player"]] = $step["Points"];
