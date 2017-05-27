@@ -4,6 +4,13 @@
 # The provider to save the statistics of players in, like player kills.
 Provider: SQLite
 
+# Settings required if the above provider is set to MySQL. If the provider is not MySQL, these settings don't matter.
+Host: 127.0.0.1
+User: Admin
+Password: Admin
+Database: KillCounter
+Port: 3306
+
 # Worlds the plugin should NOT work in.
 Disabled-Worlds:
 - MyWorld3

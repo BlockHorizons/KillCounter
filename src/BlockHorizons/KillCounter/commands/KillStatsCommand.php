@@ -39,6 +39,7 @@ class KillStatsCommand extends BaseCommand {
 
 		$sender->sendMessage(TF::GREEN . "--- " . TF::YELLOW . "KillCounter" . TF::GREEN . " ---");
 		$sender->sendMessage(
+			TF::GREEN . "KDA: " . TF::YELLOW . $this->getLoader()->getProvider()->getKda($player) . "\n" .
 			TF::GREEN . "Player Kills: " . TF::YELLOW . $data["PlayerKills"] . "\n" .
 			TF::GREEN . "Player Assists: " . TF::YELLOW . $data["PlayerAssists"] . "\n" .
 			TF::GREEN . "Entity Kills: " . TF::YELLOW . $data["EntityKills"] . "\n" .

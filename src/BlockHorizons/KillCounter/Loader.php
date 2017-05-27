@@ -9,6 +9,7 @@ use BlockHorizons\KillCounter\commands\KillsTopCommand;
 use BlockHorizons\KillCounter\handlers\KillingSpreeHandler;
 use BlockHorizons\KillCounter\listeners\PlayerEventListener;
 use BlockHorizons\KillCounter\providers\BaseProvider;
+use BlockHorizons\KillCounter\providers\MySQLProvider;
 use BlockHorizons\KillCounter\providers\SQLiteProvider;
 use economizer\Economizer;
 use economizer\Transistor;
@@ -96,6 +97,10 @@ class Loader extends PluginBase {
 			case "sqlite":
 			case "sqlite3":
 				$this->provider = new SQLiteProvider($this);
+				break;
+			case "mysql":
+			case "mysqli":
+				$this->provider = new MySQLProvider($this);
 				break;
 		}
 		return $this->provider;

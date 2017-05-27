@@ -158,4 +158,15 @@ abstract class BaseProvider implements IProvider {
 		}
 		return $this->setDeaths($player, $this->getDeaths($player) + $amount);
 	}
+
+	/**
+	 * @param $player
+	 *
+	 * @return float
+	 */
+	public function getKda($player): float {
+		$player = $this->turnToPlayerName($player);
+		$kda = ($this->getPlayerKills($player) + $this->getPlayerAssists($player)) / $this->getDeaths($player);
+		return $kda;
+	}
 }

@@ -178,4 +178,11 @@ interface IProvider {
 	 * @return bool
 	 */
 	public function hasAchievement($player, string $achievement): bool;
+
+	/**
+	 * @param $player
+	 *
+	 * @return float
+	 */
+	public function getKda($player): float;
 }
