@@ -97,7 +97,7 @@ class KillingSpreeHandler extends BaseHandler {
 						unset($this->latestKill[$player->getName()]);
 						break;
 				}
-				$message = TF::RED . TF::BOLD . $type . TF::RESET . TF::YELLOW . $player->getDisplayName() . " has slain " . TF::RED . $victim->getDisplayName() . TF::YELLOW . "!";
+				$message = TF::RED . TF::BOLD . $type . TF::RESET . TF::YELLOW . $player->getDisplayName() . TF::RESET . TF::YELLOW . " has slain " . TF::RED . $victim->getDisplayName() . TF::YELLOW . "!";
 				$this->getLoader()->getServer()->broadcastMessage($message);
 			} else {
 				unset($this->latestKill[$player->getName()]);

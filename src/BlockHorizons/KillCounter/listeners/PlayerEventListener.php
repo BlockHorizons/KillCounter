@@ -117,13 +117,13 @@ class PlayerEventListener extends BaseListener {
 					$extraPoints = $this->getKillingSpreeHandler()->getKillingSpree($lastPlayerAttacker)->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
 				}
 
-				$lastPlayerAttacker->sendMessage(TF::AQUA . "+" . (string) ($this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills - 10 : $this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getDisplayName . "!");
+				$lastPlayerAttacker->sendMessage(TF::AQUA . "+" . (string) ($this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills - 10 : $this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getDisplayName() . "!");
 				foreach($this->damagedBy[$entity->getName()] as $playerName => $damage) {
 					if($playerName === $lastPlayerAttacker->getName()) {
 						continue;
 					}
 					if(($player = $this->getLoader()->getServer()->getPlayer($playerName)) !== null) {
-						$player->sendMessage(TF::AQUA . "+" . $this->getLoader()->getConfig()->get("Points-Per-Player-Assist") . " Points! " . TF::YELLOW . "You have assisted in killing " . $entity->getDisplayName . "!");
+						$player->sendMessage(TF::AQUA . "+" . $this->getLoader()->getConfig()->get("Points-Per-Player-Assist") . " Points! " . TF::YELLOW . "You have assisted in killing " . $entity->getDisplayName(). "!");
 						$this->getProvider()->addPlayerAssists($player);
 					}
 				}
@@ -141,13 +141,13 @@ class PlayerEventListener extends BaseListener {
 					$extraPoints = $this->getKillingSpreeHandler()->getKillingSpree($killer)->getKills() * $this->getLoader()->getConfig()->get("Points-Added-Per-Spree-Kill");
 				}
 
-				$killer->sendMessage(TF::AQUA . "+" . (string) ($this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills - 10 : $this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getDisplayName . "!");
+				$killer->sendMessage(TF::AQUA . "+" . (string) ($this->getKillingSpreeHandler()->hasKillingSpree($entity) ? $spreeKills - 10 : $this->getLoader()->getConfig()->get("Points-Per-Player-Kill") + $extraPoints) . " Points! " . TF::YELLOW . "You killed " . $entity->getDisplayName(). "!");
 				foreach($this->damagedBy[$entity->getName()] as $playerName => $damage) {
 					if($playerName === $killer->getName()) {
 						continue;
 					}
 					if(($player = $this->getLoader()->getServer()->getPlayer($playerName)) !== null) {
-						$player->sendMessage(TF::AQUA . "+" . $this->getLoader()->getConfig()->get("Points-Per-Player-Assist") . " Points! " . TF::YELLOW . "You have assisted in killing " . $entity->getDisplayName . "!");
+						$player->sendMessage(TF::AQUA . "+" . $this->getLoader()->getConfig()->get("Points-Per-Player-Assist") . " Points! " . TF::YELLOW . "You have assisted in killing " . $entity->getDisplayName(). "!");
 						$this->getProvider()->addPlayerAssists($player);
 					}
 				}
