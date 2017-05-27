@@ -167,6 +167,9 @@ class PlayerEventListener extends BaseListener {
 	 * @param PlayerPointsChangeEvent $event
 	 */
 	public function onPointsGain(PlayerPointsChangeEvent $event) {
+		if($this->getLoader()->getConfig()->get("Enable-Achievements") !== true) {
+			return;
+		}
 		foreach($this->getLoader()->getAchievementManager()->getAchievements() as $name => $achievement) {
 			if($achievement->meetsRequirements($event->getPlayer())) {
 				if($this->getLoader()->getProvider()->hasAchievement($event->getPlayer(), $name)) {
