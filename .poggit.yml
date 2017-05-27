@@ -2,5 +2,5 @@
 projects:
   KillCounter:
     path: ""
-    icon: resources\KillCounterLogo.png
+    icon: resources/KillCounterLogo.png
 ...
