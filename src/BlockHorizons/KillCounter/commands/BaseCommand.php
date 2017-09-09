@@ -9,6 +9,7 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\Player;
+use pocketmine\plugin\Plugin;
 
 abstract class BaseCommand extends Command implements PluginIdentifiableCommand {
 
@@ -23,7 +24,7 @@ abstract class BaseCommand extends Command implements PluginIdentifiableCommand 
 	/**
 	 * @return Loader
 	 */
-	public function getPlugin(): Loader {
+	public function getPlugin(): plugin {
 		return $this->loader;
 	}
 
@@ -41,7 +42,7 @@ abstract class BaseCommand extends Command implements PluginIdentifiableCommand 
 		return $this->getLoader()->getProvider();
 	}
 
-	public function generateCustomCommandData(Player $player) {
+	public function generateCustomCommandData(Player $player): array {
 		$commandData = parent::generateCustomCommandData($player);
 		$commandData["overloads"]["default"]["input"]["parameters"] = CommandOverloads::getOverloads($this->getName());
 		return $commandData;
