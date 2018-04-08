@@ -1,23 +1,37 @@
----
-name: "KillCounter"
-version: 0.99.0
-api: [3.0.0-ALPHA7]
-author: "BlockHorizons"
-main: BlockHorizons\KillCounter\Loader
+{
+    "name": "KillCounter",
+    "version": "1.0.0",
+    "api": [
+        "3.0.0-ALPHA10",
+        "3.0.0-ALPHA11"
+     ],
+    "author": "BlockHorizons",
+    "authors": [
+        "Sandertv (@Sandertv)",
+        "Luke (@lukeeey)"
+    ],
+    "main": "BlockHorizons\\KillCounter\\Loader",
 
-permissions:
-  killcounter:
-    default: false
-    description: "Allows access to every feature of KillCounter"
-    children:
-      killcounter.command:
-        default: false
-        description: "Allows access to all KillCounter commands"
-        children:
-          killcounter.command.killstats:
-            default: true
-            description: "Allows access to the killstats command"
-          killcounter.command.killstop:
-            default: true
-            description: "Allows access to the killstop command"
-...
+    "permissions": {
+        "killcounter": {
+            "default": false,
+            "description": "Allows access to every feature of KillCounter",
+            "children": {
+                "killcounter.command": {
+                    "default": false,
+                    "description": "Allows access to all KillCounter commands",
+                    "children": {
+                        "killcounter.command.killstats": {
+                            "default": true,
+                            "description": "Allows access to the killstats command"
+                        },
+                        "killcounter.command.killstop": {
+                            "default": true,
+                            "description": "Allows access to the killstop command"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

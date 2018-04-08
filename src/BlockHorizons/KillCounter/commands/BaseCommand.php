@@ -15,7 +15,7 @@ abstract class BaseCommand extends Command implements PluginIdentifiableCommand 
 
 	private $loader;
 
-	public function __construct(Loader $loader, $name, $description = "", $usageMessage = null, $aliases = []) {
+	public function __construct(Loader $loader, string $name, string $description = "", $usageMessage = null, array $aliases = []) {
 		parent::__construct($name, $description, $usageMessage, $aliases);
 		$this->setPermission("killcounter.command." . $this->getName());
 		$this->loader = $loader;
