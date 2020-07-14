@@ -12,7 +12,7 @@ KillCounter has a more advanced kill tracking system than other kill tracking pl
 - [x] Assists feature, giving points to every player that assisted in killing a player.
 - [x] Custom PvP achievements, which can be created in the configuration.
 
-... I'm convinced. How do I download this?
+.. I'm convinced. How do I download this?
 
 ### Installation
 It is mostly recommended to use released versions of the plugin, which can be found in the released version on Poggit. (once there is one)<br>
