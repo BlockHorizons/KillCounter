@@ -2,8 +2,15 @@
     "name": "KillCounter",
     "version": "1.0.0",
     "api": [
-        "3.0.0-ALPHA10",
-        "3.0.0-ALPHA11"
+        "3.14.0"
+     ],
+     "mcpe-protocol": [
+        "361",
+        "388",
+        "389",
+        "390",
+        "407",
+        "408"
      ],
     "author": "BlockHorizons",
     "authors": [
