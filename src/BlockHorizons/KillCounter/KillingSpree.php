@@ -28,9 +28,9 @@ class KillingSpree {
 	}
 
 	/**
-	 * @return Player
+	 * @return null|Player
 	 */
-	public function getPlayer(): Player {
+	public function getPlayer(): ?Player {
 		return Server::getInstance()->getPlayer($this->player);
 	}
 
